@@ -1008,7 +1008,7 @@ partial class Build
                     {
                         "Samples.AspNetCoreMvc21" => Framework == TargetFramework.NETCOREAPP2_1,
                         "Samples.AspNetCoreMvc30" => Framework == TargetFramework.NETCOREAPP3_0,
-                        "Samples.AspNetCoreMvc31" => Framework == TargetFramework.NETCOREAPP3_1,
+                        "Samples.AspNetCoreMvc31" => Framework == TargetFramework.NETCOREAPP3_1 || Framework == TargetFramework.NET5_0,
                         "Samples.AspNetCore2" => Framework == TargetFramework.NETCOREAPP2_1,
                         "Samples.AspNetCore5" => Framework == TargetFramework.NET5_0 || Framework == TargetFramework.NETCOREAPP3_1 || Framework == TargetFramework.NETCOREAPP3_0,
                         var name when projectsToSkip.Contains(name) => false,
@@ -1193,7 +1193,7 @@ partial class Build
         return archExt;
     }
 
-    // the integration tests need their own copy of the profiler, this achived through build.props on Windows, but doesn't seem to work under Linux 
+    // the integration tests need their own copy of the profiler, this achived through build.props on Windows, but doesn't seem to work under Linux
     private void IntegrationTestLinuxProfilerDirFudge(string project)
     {
             // Not sure if/why this is necessary, and we can't just point to the correct output location
