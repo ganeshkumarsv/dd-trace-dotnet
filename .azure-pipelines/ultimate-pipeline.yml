@@ -1012,7 +1012,7 @@ stages:
       displayName: Download windows native binary
       inputs:
         artifact: windows-tracer-home
-        patterns: 'win-x64/*.dll'
+        patterns: '**/win-x64/*.dll'
         path: $(System.DefaultWorkingDirectory)
 
     - task: DownloadPipelineArtifact@2
@@ -1030,6 +1030,8 @@ stages:
         path: $(System.DefaultWorkingDirectory)/arm64
 
     - script: |
+        mv win-x64/*.dll ./
+        rmdir win-x64
         ls .
       displayName: Crank
       env:
