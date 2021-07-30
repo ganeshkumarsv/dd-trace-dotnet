@@ -957,6 +957,7 @@ stages:
         path: $(System.DefaultWorkingDirectory)/arm64
 
     - script: |
+        ls .
         cd $(System.DefaultWorkingDirectory)/build/crank
         chmod +x ./run.sh
         ./run.sh
