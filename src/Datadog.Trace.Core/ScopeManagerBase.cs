@@ -21,18 +21,21 @@ namespace Datadog.Trace
 
         public event EventHandler<SpanEventArgs> TraceEnded;
 
-        public abstract Scope Active { get; protected set; }
+        public abstract IScope Active { get; protected set; }
 
-        Scope IScopeRawAccess.Active
+        // TODO: set ScopeFactory
+        public Func<IScope, ISpan, IScopeManager, bool, IScope> ScopeFactory { get; }
+
+        IScope IScopeRawAccess.Active
         {
             get => Active;
             set => Active = value;
         }
 
-        public Scope Activate(Span span, bool finishOnClose)
+        public IScope Activate(ISpan span, bool finishOnClose)
         {
-            var newParent = Active;
-            var scope = new Scope(newParent, span, this, finishOnClose);
+            IScope newParent = Active;
+            IScope scope = ScopeFactory(newParent, span, this, finishOnClose);
             var scopeOpenedArgs = new SpanEventArgs(span);
 
             if (newParent == null)
@@ -54,7 +57,7 @@ namespace Datadog.Trace
             return scope;
         }
 
-        public void Close(Scope scope)
+        public void Close(IScope scope)
         {
             var current = Active;
             var isRootSpan = scope.Parent == null;

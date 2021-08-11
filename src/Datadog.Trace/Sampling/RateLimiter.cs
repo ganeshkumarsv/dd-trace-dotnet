@@ -39,7 +39,7 @@ namespace Datadog.Trace.Sampling
             _windowBegin = Clock.UtcNow;
         }
 
-        public bool Allowed(Span span)
+        public bool Allowed(ISpan span)
         {
             try
             {

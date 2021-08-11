@@ -3,8 +3,6 @@
 // This product includes software developed at Datadog (https://www.datadoghq.com/). Copyright 2017 Datadog, Inc.
 // </copyright>
 
-using Datadog.Trace.Abstractions;
-
 namespace Datadog.Trace
 {
     /// <summary>
@@ -38,6 +36,9 @@ namespace Datadog.Trace
         ISpan IScope.Span => Span;
 
         internal Scope Parent { get; }
+
+        /// <inheritdoc/>
+        IScope IScope.Parent => Parent;
 
         /// <summary>
         /// Closes the current scope and makes its parent scope active

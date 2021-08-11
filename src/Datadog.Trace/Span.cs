@@ -6,7 +6,6 @@
 using System;
 using System.Globalization;
 using System.Text;
-using Datadog.Trace.Abstractions;
 using Datadog.Trace.ExtensionMethods;
 using Datadog.Trace.Logging;
 using Datadog.Trace.Tagging;
@@ -90,6 +89,11 @@ namespace Datadog.Trace
 
         internal SpanContext Context { get; }
 
+        /// <summary>
+        /// Gets the span's context.
+        /// </summary>
+        ISpanContext ISpan.Context => Context;
+
         internal DateTimeOffset StartTime { get; private set; }
 
         internal TimeSpan Duration { get; private set; }
@@ -98,7 +102,15 @@ namespace Datadog.Trace
 
         internal bool IsRootSpan => Context.TraceContext?.RootSpan == this;
 
+        /// <summary>
+        /// Gets a value indicating whether this span is the top-level span for its service.
+        /// </summary>
         internal bool IsTopLevel => Context.Parent == null || Context.Parent.ServiceName != ServiceName;
+
+        /// <summary>
+        /// Gets a value indicating whether this span is the top-level span for its service.
+        /// </summary>
+        bool ISpan.IsTopLevel => IsTopLevel;
 
         /// <summary>
         /// Returns a <see cref="string" /> that represents this instance.
@@ -367,6 +379,27 @@ namespace Datadog.Trace
             Tags.SetMetric(key, value);
 
             return this;
+        }
+
+        /// <summary>
+        /// Gets the value of the numeric tag with the specified name, or null if not found.
+        /// </summary>
+        /// <param name="key">The tag's key</param>
+        /// <returns>The value of the numeric tag with the specified name, or null if not found.</returns>
+        double? ISpan.GetMetric(string key)
+        {
+            return GetMetric(key);
+        }
+
+        /// <summary>
+        /// Add a the specified numeric tag to this span.
+        /// </summary>
+        /// <param name="key">The numeric tag's key.</param>
+        /// <param name="value">The numeric tag's value.</param>
+        /// <returns>This span to allow method chaining.</returns>
+        ISpan ISpan.SetMetric(string key, double? value)
+        {
+            return SetMetric(key, value);
         }
 
         internal void ResetStartTime()

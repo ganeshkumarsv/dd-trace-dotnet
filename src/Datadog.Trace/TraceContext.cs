@@ -18,7 +18,7 @@ namespace Datadog.Trace
 
         private readonly DateTimeOffset _utcStart = DateTimeOffset.UtcNow;
         private readonly long _timestamp = Stopwatch.GetTimestamp();
-        private ArrayBuilder<Span> _spans;
+        private ArrayBuilder<ISpan> _spans;
 
         private int _openSpans;
         private SamplingPriority? _samplingPriority;
@@ -29,7 +29,7 @@ namespace Datadog.Trace
             Tracer = tracer;
         }
 
-        public Span RootSpan { get; private set; }
+        public ISpan RootSpan { get; private set; }
 
         public DateTimeOffset UtcNow => _utcStart.Add(Elapsed);
 
@@ -54,7 +54,7 @@ namespace Datadog.Trace
 
         private TimeSpan Elapsed => StopwatchHelpers.GetElapsed(Stopwatch.GetTimestamp() - _timestamp);
 
-        public void AddSpan(Span span)
+        public void AddSpan(ISpan span)
         {
             lock (this)
             {
@@ -87,7 +87,7 @@ namespace Datadog.Trace
             }
         }
 
-        public void CloseSpan(Span span)
+        public void CloseSpan(ISpan span)
         {
             bool ShouldTriggerPartialFlush() => Tracer.Settings.PartialFlushEnabled && _spans.Count >= Tracer.Settings.PartialFlushMinSpans;
 
@@ -113,7 +113,7 @@ namespace Datadog.Trace
                 }
             }
 
-            ArraySegment<Span> spansToWrite = default;
+            ArraySegment<ISpan> spansToWrite = default;
 
             lock (this)
             {
@@ -138,7 +138,7 @@ namespace Datadog.Trace
                     // Making the assumption that, if the number of closed spans was big enough to trigger partial flush,
                     // the number of remaining spans is probably big as well.
                     // Therefore, we bypass the resize logic and immediately allocate the array to its maximum size
-                    _spans = new ArrayBuilder<Span>(spansToWrite.Count);
+                    _spans = new ArrayBuilder<ISpan>(spansToWrite.Count);
                 }
             }
 
@@ -165,7 +165,7 @@ namespace Datadog.Trace
             return Elapsed + (_utcStart - date);
         }
 
-        private void DecorateRootSpan(Span span)
+        private void DecorateRootSpan(ISpan span)
         {
             if (AzureAppServices.Metadata.IsRelevant)
             {

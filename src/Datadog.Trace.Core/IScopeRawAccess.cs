@@ -10,6 +10,6 @@ namespace Datadog.Trace
     /// </summary>
     internal interface IScopeRawAccess
     {
-        Scope Active { get; set; }
+        IScope Active { get; set; }
     }
 }

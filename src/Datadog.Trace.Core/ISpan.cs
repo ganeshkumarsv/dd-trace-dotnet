@@ -5,10 +5,20 @@
 
 using System;
 
-namespace Datadog.Trace.Abstractions
+namespace Datadog.Trace
 {
     internal interface ISpan
     {
+        ISpanContext Context { get; }
+
+        ulong TraceId { get; }
+
+        ulong SpanId { get; }
+
+        string ServiceName { get; set; }
+
+        string OperationName { get; set; }
+
         string ResourceName { get; set; }
 
         string Type { get; set; }
@@ -18,9 +28,18 @@ namespace Datadog.Trace.Abstractions
         /// </summary>
         bool Error { get; set; }
 
+        /// <summary>
+        /// Gets a value indicating whether this span is the top-level span for its service.
+        /// </summary>
+        bool IsTopLevel { get; }
+
         ISpan SetTag(string key, string value);
 
         string GetTag(string key);
+
+        ISpan SetMetric(string key, double? value);
+
+        double? GetMetric(string key);
 
         void SetException(Exception exception);
     }

@@ -7,9 +7,9 @@ namespace Datadog.Trace
 {
     internal class AsyncLocalScopeManager : ScopeManagerBase
     {
-        private readonly AsyncLocalCompat<Scope> _activeScope = new();
+        private readonly AsyncLocalCompat<IScope> _activeScope = new();
 
-        public override Scope Active
+        public override IScope Active
         {
             get
             {

@@ -181,7 +181,7 @@ namespace Datadog.Trace.Tagging
             }
         }
 
-        public int SerializeTo(ref byte[] bytes, int offset, Span span)
+        public int SerializeTo(ref byte[] bytes, int offset, ISpan span)
         {
             int originalOffset = offset;
 
@@ -262,7 +262,7 @@ namespace Datadog.Trace.Tagging
             offset += MessagePackBinary.WriteDouble(ref bytes, offset, value);
         }
 
-        private int WriteTags(ref byte[] bytes, int offset, Span span)
+        private int WriteTags(ref byte[] bytes, int offset, ISpan span)
         {
             int originalOffset = offset;
 
@@ -331,7 +331,7 @@ namespace Datadog.Trace.Tagging
             return offset - originalOffset;
         }
 
-        private int WriteMetrics(ref byte[] bytes, int offset, Span span)
+        private int WriteMetrics(ref byte[] bytes, int offset, ISpan span)
         {
             int originalOffset = offset;
 

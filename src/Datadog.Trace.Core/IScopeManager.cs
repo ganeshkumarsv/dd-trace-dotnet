@@ -24,10 +24,10 @@ namespace Datadog.Trace
 
         event EventHandler<SpanEventArgs> TraceEnded;
 
-        Scope Active { get; }
+        IScope Active { get; }
 
-        Scope Activate(Span span, bool finishOnClose);
+        IScope Activate(ISpan span, bool finishOnClose);
 
-        void Close(Scope scope);
+        void Close(IScope scope);
     }
 }
