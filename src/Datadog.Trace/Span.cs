@@ -319,10 +319,13 @@ namespace Datadog.Trace
         }
 
         /// <summary>
-        /// Gets the value (or default/null if the key is not a valid tag) of a tag with the key value passed
+        /// Gets the value of the numeric tag with the specified name, or <c>null</c> if not found.
         /// </summary>
-        /// <param name="key">The tag's key</param>
-        /// <returns> The value for the tag with the key specified, or null if the tag does not exist</returns>
+        /// <param name="key">The tag's name.</param>
+        /// <returns>
+        /// The value of the numeric tag with the specified name,
+        /// or <c>null</c> if not found.
+        /// </returns>
         public string GetTag(string key)
         {
             switch (key)
@@ -382,10 +385,13 @@ namespace Datadog.Trace
         }
 
         /// <summary>
-        /// Gets the value of the numeric tag with the specified name, or null if not found.
+        /// Gets the value of the numeric tag with the specified name, or <c>null</c> if not found.
         /// </summary>
-        /// <param name="key">The tag's key</param>
-        /// <returns>The value of the numeric tag with the specified name, or null if not found.</returns>
+        /// <param name="key">The tag's name.</param>
+        /// <returns>
+        /// The value of the numeric tag with the specified name,
+        /// or <c>null</c> if not found.
+        /// </returns>
         double? ISpan.GetMetric(string key)
         {
             return GetMetric(key);

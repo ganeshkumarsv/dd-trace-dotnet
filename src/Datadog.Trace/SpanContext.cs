@@ -106,13 +106,9 @@ namespace Datadog.Trace
         internal string Origin { get; set; }
 
         /// <summary>
-        /// Gets or sets the origin of the trace.
+        /// Gets the origin of the trace.
         /// </summary>
-        string ISpanContext.Origin
-        {
-            get => Origin;
-            set => Origin = value;
-        }
+        string ISpanContext.Origin => Origin;
 
         /// <summary>
         /// Gets the trace context.
