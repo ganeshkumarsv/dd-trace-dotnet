@@ -405,6 +405,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogsInjection.ILogger", "te
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NServiceBus.MongoDB.Saga", "test\test-applications\regression\NServiceBus.MongoDB.Saga\NServiceBus.MongoDB.Saga.csproj", "{9D5935CB-2DF2-46CB-A5E1-98BE134CAFCC}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NServiceBus.SqlServer.Saga", "test\test-applications\regression\NServiceBus.SqlServer.Saga\NServiceBus.SqlServer.Saga.csproj", "{9D5935CB-2DF2-46CB-A5E1-98BE134CAFCC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
