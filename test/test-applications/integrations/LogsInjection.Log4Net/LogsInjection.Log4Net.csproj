@@ -42,7 +42,6 @@
       <OtherApplicationFiles Include="$(OutputPath)PluginApplication.pdb" />
 
       <!-- Testing workaround. Remove when log4net logs injection is able to work with cross-appdomain calls -->
-      <OtherApplicationFiles Condition="$(TargetFramework.StartsWith('net4'))" Include="$(OutputPath)log4net.dll" />
     </ItemGroup>
 
     <Copy SourceFiles="@(OtherApplicationFiles)" DestinationFolder="$(OutputPath)ApplicationFiles" />
