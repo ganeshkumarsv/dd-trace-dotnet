@@ -56,11 +56,30 @@ namespace Datadog.Trace.Logging
             {
                 try
                 {
-                    _environment = logProvider.OpenMappedContext(CorrelationIdentifier.EnvKey, enricher._environmentProperty);
-                    _version = logProvider.OpenMappedContext(CorrelationIdentifier.VersionKey, enricher._versionProperty);
-                    _service = logProvider.OpenMappedContext(CorrelationIdentifier.ServiceKey, enricher._serviceProperty);
-                    _traceId = logProvider.OpenMappedContext(CorrelationIdentifier.TraceIdKey, enricher._traceIdProperty);
-                    _spanId = logProvider.OpenMappedContext(CorrelationIdentifier.SpanIdKey, enricher._spanIdProperty);
+                    if (enricher._environmentProperty is not null)
+                    {
+                        _environment = logProvider.OpenMappedContext(CorrelationIdentifier.EnvKey, enricher._environmentProperty);
+                    }
+
+                    if (enricher._versionProperty is not null)
+                    {
+                        _version = logProvider.OpenMappedContext(CorrelationIdentifier.VersionKey, enricher._versionProperty);
+                    }
+
+                    if (enricher._serviceProperty is not null)
+                    {
+                        _service = logProvider.OpenMappedContext(CorrelationIdentifier.ServiceKey, enricher._serviceProperty);
+                    }
+
+                    if (enricher._traceIdProperty is not null)
+                    {
+                        _traceId = logProvider.OpenMappedContext(CorrelationIdentifier.TraceIdKey, enricher._traceIdProperty);
+                    }
+
+                    if (enricher._spanIdProperty is not null)
+                    {
+                        _spanId = logProvider.OpenMappedContext(CorrelationIdentifier.SpanIdKey, enricher._spanIdProperty);
+                    }
                 }
                 catch
                 {

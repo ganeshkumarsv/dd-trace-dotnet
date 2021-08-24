@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(ApiVersion)' &gt;= '2.0.5'">
-    <PackageReference Include="log4net.Ext.Json" Version="1.2.15.14586" />
+    <PackageReference Include="log4net.Ext.Json" Version="2.0.10.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -40,6 +40,9 @@
       <!-- Subfolders of the output directory should each be a target framework -->
       <OtherApplicationFiles Include="$(OutputPath)PluginApplication.dll" />
       <OtherApplicationFiles Include="$(OutputPath)PluginApplication.pdb" />
+
+      <!-- Testing workaround. Remove when log4net logs injection is able to work with cross-appdomain calls -->
+      <OtherApplicationFiles Condition="$(TargetFramework.StartsWith('net4'))" Include="$(OutputPath)log4net.dll" />
     </ItemGroup>
 
     <Copy SourceFiles="@(OtherApplicationFiles)" DestinationFolder="$(OutputPath)ApplicationFiles" />
