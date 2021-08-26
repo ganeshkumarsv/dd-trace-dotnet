@@ -50,8 +50,8 @@ namespace Datadog.Trace.DiagnosticListeners
                    ?.GetType("Microsoft.AspNetCore.Http.Features.IEndpointFeature", throwOnError: false);
 
         private static readonly IDatadogLogger Log = DatadogLogging.GetLoggerFor<AspNetCoreDiagnosticObserver>();
-        private readonly Tracer _tracer;
-        private readonly Security _security;
+        private readonly IDatadogTracer _tracer;
+        private readonly IDatadogSecurity _security;
 
         private string _hostingHttpRequestInStartEventKey;
         private string _mvcBeforeActionEventKey;
@@ -66,7 +66,7 @@ namespace Datadog.Trace.DiagnosticListeners
         {
         }
 
-        public AspNetCoreDiagnosticObserver(Tracer tracer, Security security)
+        public AspNetCoreDiagnosticObserver(IDatadogTracer tracer, IDatadogSecurity security)
         {
             _tracer = tracer;
             _security = security;
@@ -74,7 +74,7 @@ namespace Datadog.Trace.DiagnosticListeners
 
         protected override string ListenerName => DiagnosticListenerName;
 
-        private Tracer CurrentTracer => _tracer ?? Tracer.Instance;
+        private IDatadogTracer CurrentTracer => _tracer ?? Tracer.Instance;
 
         private IDatadogSecurity CurrentSecurity => _security ?? Security.Instance;
 
@@ -290,7 +290,7 @@ namespace Datadog.Trace.DiagnosticListeners
             return null;
         }
 
-        private static IEnumerable<KeyValuePair<string, string>> ExtractHeaderTags(HttpRequest request, IDatadogTracer tracer)
+        private static IEnumerable<KeyValuePair<string, string>> ExtractHeaderTags(HttpRequest request, Tracer tracer)
         {
             var settings = tracer.Settings;
 
@@ -478,7 +478,7 @@ namespace Datadog.Trace.DiagnosticListeners
             span.ResourceName = resourceName;
         }
 
-        private static Span StartMvcCoreSpan(Tracer tracer, Span parentSpan, BeforeActionStruct typedArg, HttpContext httpContext, HttpRequest request)
+        private static ISpan StartMvcCoreSpan(Tracer tracer, ISpan parentSpan, BeforeActionStruct typedArg, HttpContext httpContext, HttpRequest request)
         {
             // Create a child span for the MVC action
             var mvcSpanTags = new AspNetCoreEndpointTags();

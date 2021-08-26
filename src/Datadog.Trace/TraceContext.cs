@@ -5,6 +5,7 @@
 
 using System;
 using System.Diagnostics;
+using Datadog.Trace.Configuration;
 using Datadog.Trace.Logging;
 using Datadog.Trace.PlatformHelpers;
 using Datadog.Trace.Tagging;
@@ -18,15 +19,17 @@ namespace Datadog.Trace
 
         private readonly DateTimeOffset _utcStart = DateTimeOffset.UtcNow;
         private readonly long _timestamp = Stopwatch.GetTimestamp();
-        private ArrayBuilder<ISpan> _spans;
+        private readonly TracerSettings _settings;
 
+        private ArrayBuilder<ISpan> _spans;
         private int _openSpans;
         private SamplingPriority? _samplingPriority;
         private bool _samplingPriorityLocked;
 
-        public TraceContext(IDatadogTracer tracer)
+        public TraceContext(IDatadogTracer tracer, TracerSettings settings)
         {
             Tracer = tracer;
+            _settings = settings;
         }
 
         public ISpan RootSpan { get; private set; }
@@ -89,7 +92,7 @@ namespace Datadog.Trace
 
         public void CloseSpan(ISpan span)
         {
-            bool ShouldTriggerPartialFlush() => Tracer.Settings.PartialFlushEnabled && _spans.Count >= Tracer.Settings.PartialFlushMinSpans;
+            bool ShouldTriggerPartialFlush() => _settings.PartialFlushEnabled && _spans.Count >= _settings.PartialFlushMinSpans;
 
             if (span == RootSpan)
             {

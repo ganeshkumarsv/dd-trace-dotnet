@@ -7,10 +7,23 @@ using System;
 
 namespace Datadog.Trace
 {
-    internal interface IScope : IDisposable
+    /// <summary>
+    /// A scope is a handle used to manage the concept of an active span.
+    /// Meaning that at a given time at most one span is considered active and
+    /// all newly created spans that are not created with the ignoreActiveSpan
+    /// parameter will be automatically children of the active span.
+    /// </summary>
+    public interface IScope : IDisposable
     {
+        /// <summary>
+        /// Gets the span associated to this scope.
+        /// </summary>
         ISpan Span { get; }
 
+        /// <summary>
+        /// Gets the scope that is the parent of this scope,
+        /// or <c>null</c> if it has no parent.
+        /// </summary>
         IScope Parent { get; }
     }
 }

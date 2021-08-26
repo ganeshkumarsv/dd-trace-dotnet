@@ -13,7 +13,7 @@ namespace Datadog.Trace.Agent.MessagePack
     {
         public static readonly IFormatterResolver Instance = new SpanFormatterResolver();
 
-        private static readonly IMessagePackFormatter<Span> Formatter = new SpanMessagePackFormatter();
+        private static readonly IMessagePackFormatter<ISpan> Formatter = new SpanMessagePackFormatter();
 
         private SpanFormatterResolver()
         {

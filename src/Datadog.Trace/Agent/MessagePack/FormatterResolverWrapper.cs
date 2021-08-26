@@ -8,7 +8,7 @@ using Datadog.Trace.Vendors.MessagePack.Formatters;
 
 namespace Datadog.Trace.Agent.MessagePack
 {
-    internal struct FormatterResolverWrapper : IFormatterResolver
+    internal readonly struct FormatterResolverWrapper : IFormatterResolver
     {
         private readonly IFormatterResolver _resolver;
 

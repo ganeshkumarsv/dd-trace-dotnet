@@ -4,6 +4,7 @@
 // </copyright>
 
 using System;
+using Datadog.Trace.Tagging;
 
 namespace Datadog.Trace
 {
@@ -43,7 +44,7 @@ namespace Datadog.Trace
         string ResourceName { get; set; }
 
         /// <summary>
-        /// Gets of sets the span's type.
+        /// Gets or sets the span's type.
         /// </summary>
         string Type { get; set; }
 
@@ -56,6 +57,21 @@ namespace Datadog.Trace
         /// Gets a value indicating whether this span is the top-level span for its service.
         /// </summary>
         bool IsTopLevel { get; }
+
+        /// <summary>
+        /// Gets the starting time of this span.
+        /// </summary>
+        DateTimeOffset StartTime { get; }
+
+        /// <summary>
+        /// Gets the during of this span.
+        /// </summary>
+        TimeSpan Duration { get; }
+
+        /// <summary>
+        /// Gets the collection of tags associated to this span.
+        /// </summary>
+        ITags Tags { get; }
 
         /// <summary>
         /// Add a the specified string tag to this span.
@@ -93,6 +109,11 @@ namespace Datadog.Trace
         /// </returns>
         double? GetMetric(string key);
 
+        /// <summary>
+        /// Sets the span's error flag and adds error tags
+        /// using values from the specified <paramref name="exception"/> object.
+        /// </summary>
+        /// <param name="exception">The exception.</param>
         void SetException(Exception exception);
     }
 }

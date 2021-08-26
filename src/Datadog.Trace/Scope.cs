@@ -35,9 +35,16 @@ namespace Datadog.Trace
         /// </summary>
         ISpan IScope.Span => Span;
 
+        /// <summary>
+        /// Gets the scope that is the parent of this scope,
+        /// or <c>null</c> if it has no parent.
+        /// </summary>
         internal Scope Parent { get; }
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// Gets the scope that is the parent of this scope,
+        /// or <c>null</c> if it has no parent.
+        /// </summary>
         IScope IScope.Parent => Parent;
 
         /// <summary>

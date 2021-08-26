@@ -222,7 +222,7 @@ namespace Datadog.Trace
         /// <summary>
         /// Gets the active scope
         /// </summary>
-        public Scope ActiveScope => _scopeManager.Active;
+        public IScope ActiveScope => _scopeManager.Active;
 
         /// <summary>
         /// Gets the default service name for traces where a service name is not specified.
@@ -332,9 +332,9 @@ namespace Datadog.Trace
         /// <param name="ignoreActiveScope">If set the span will not be a child of the currently active span</param>
         /// <param name="finishOnClose">If set to false, closing the returned scope will not close the enclosed span </param>
         /// <returns>A scope wrapping the newly created span</returns>
-        public Scope StartActive(string operationName, ISpanContext parent = null, string serviceName = null, DateTimeOffset? startTime = null, bool ignoreActiveScope = false, bool finishOnClose = true)
+        public IScope StartActive(string operationName, ISpanContext parent = null, string serviceName = null, DateTimeOffset? startTime = null, bool ignoreActiveScope = false, bool finishOnClose = true)
         {
-            var span = StartSpan(operationName, parent, serviceName, startTime, ignoreActiveScope);
+            var span = StartSpan(operationName, tags: null, parent, serviceName, startTime, ignoreActiveScope, spanId: null);
             return _scopeManager.Activate(span, finishOnClose);
         }
 
@@ -343,9 +343,9 @@ namespace Datadog.Trace
         /// </summary>
         /// <param name="operationName">The span's operation name</param>
         /// <returns>The newly created span</returns>
-        Span IDatadogTracer.StartSpan(string operationName)
+        ISpan IDatadogTracer.StartSpan(string operationName)
         {
-            return StartSpan(operationName);
+            return StartSpan(operationName, tags: null, parent: null, serviceName: null, startTime: null, ignoreActiveScope: false, spanId: null);
         }
 
         /// <summary>
@@ -354,9 +354,9 @@ namespace Datadog.Trace
         /// <param name="operationName">The span's operation name</param>
         /// <param name="parent">The span's parent</param>
         /// <returns>The newly created span</returns>
-        Span IDatadogTracer.StartSpan(string operationName, ISpanContext parent)
+        ISpan IDatadogTracer.StartSpan(string operationName, ISpanContext parent)
         {
-            return StartSpan(operationName, parent);
+            return StartSpan(operationName, tags: null, parent, serviceName: null, startTime: null, ignoreActiveScope: false, spanId: null);
         }
 
         /// <summary>
@@ -368,7 +368,21 @@ namespace Datadog.Trace
         /// <param name="startTime">An explicit start time for that span</param>
         /// <param name="ignoreActiveScope">If set the span will not be a child of the currently active span</param>
         /// <returns>The newly created span</returns>
-        public Span StartSpan(string operationName, ISpanContext parent = null, string serviceName = null, DateTimeOffset? startTime = null, bool ignoreActiveScope = false)
+        public ISpan StartSpan(string operationName, ISpanContext parent = null, string serviceName = null, DateTimeOffset? startTime = null, bool ignoreActiveScope = false)
+        {
+            return StartSpan(operationName, tags: null, parent, serviceName, startTime, ignoreActiveScope, spanId: null);
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="Span"/> with the specified parameters.
+        /// </summary>
+        /// <param name="operationName">The span's operation name</param>
+        /// <param name="parent">The span's parent</param>
+        /// <param name="serviceName">The span's service name</param>
+        /// <param name="startTime">An explicit start time for that span</param>
+        /// <param name="ignoreActiveScope">If set the span will not be a child of the currently active span</param>
+        /// <returns>The newly created span</returns>
+        ISpan IDatadogTracer.StartSpan(string operationName, ISpanContext parent, string serviceName, DateTimeOffset? startTime, bool ignoreActiveScope)
         {
             return StartSpan(operationName, tags: null, parent, serviceName, startTime, ignoreActiveScope, spanId: null);
         }
@@ -384,7 +398,7 @@ namespace Datadog.Trace
         /// Writes the specified <see cref="Span"/> collection to the agent writer.
         /// </summary>
         /// <param name="trace">The <see cref="Span"/> collection to write.</param>
-        void IDatadogTracer.Write(ArraySegment<Span> trace)
+        void IDatadogTracer.Write(ArraySegment<ISpan> trace)
         {
             if (Settings.TraceEnabled)
             {
@@ -407,26 +421,24 @@ namespace Datadog.Trace
             if (parent is SpanContext parentSpanContext)
             {
                 traceContext = parentSpanContext.TraceContext ??
-                    new TraceContext(this) { SamplingPriority = parentSpanContext.SamplingPriority };
+                    new TraceContext(this, Settings) { SamplingPriority = parentSpanContext.SamplingPriority };
             }
             else
             {
-                traceContext = new TraceContext(this);
+                traceContext = new TraceContext(this, Settings);
             }
 
             var finalServiceName = serviceName ?? parent?.ServiceName ?? DefaultServiceName;
-            var spanContext = new SpanContext(parent, traceContext, finalServiceName, spanId);
-
-            return spanContext;
+            return new SpanContext(parent, traceContext, finalServiceName, spanId);
         }
 
-        internal Scope StartActiveWithTags(string operationName, ISpanContext parent = null, string serviceName = null, DateTimeOffset? startTime = null, bool ignoreActiveScope = false, bool finishOnClose = true, ITags tags = null, ulong? spanId = null)
+        internal IScope StartActiveWithTags(string operationName, ISpanContext parent = null, string serviceName = null, DateTimeOffset? startTime = null, bool ignoreActiveScope = false, bool finishOnClose = true, ITags tags = null, ulong? spanId = null)
         {
             var span = StartSpan(operationName, tags, parent, serviceName, startTime, ignoreActiveScope, spanId);
             return _scopeManager.Activate(span, finishOnClose);
         }
 
-        internal Span StartSpan(string operationName, ITags tags, ISpanContext parent = null, string serviceName = null, DateTimeOffset? startTime = null, bool ignoreActiveScope = false, ulong? spanId = null)
+        internal ISpan StartSpan(string operationName, ITags tags, ISpanContext parent = null, string serviceName = null, DateTimeOffset? startTime = null, bool ignoreActiveScope = false, ulong? spanId = null)
         {
             var spanContext = CreateSpanContext(parent, serviceName, ignoreActiveScope, spanId);
 
@@ -733,7 +745,7 @@ namespace Datadog.Trace
 
         private void InitializeLibLogScopeEventSubscriber(IScopeManager scopeManager, string defaultServiceName, string version, string env)
         {
-            new LibLogScopeEventSubscriber(this, scopeManager, defaultServiceName, version ?? string.Empty, env ?? string.Empty);
+            _ = new LibLogScopeEventSubscriber(this, scopeManager, defaultServiceName, version ?? string.Empty, env ?? string.Empty);
         }
 
         private void CurrentDomain_ProcessExit(object sender, EventArgs e)

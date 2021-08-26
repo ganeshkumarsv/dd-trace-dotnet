@@ -24,10 +24,10 @@ namespace Datadog.Trace
         private static readonly IDatadogLogger Log = DatadogLogging.GetLoggerFor<Span>();
         private static readonly bool IsLogLevelDebugEnabled = Log.IsEnabled(LogEventLevel.Debug);
 
-        private readonly object _lock = new object();
+        private readonly object _lock = new();
 
         internal Span(SpanContext context, DateTimeOffset? start)
-            : this(context, start, null)
+            : this(context, start, tags: null)
         {
         }
 
@@ -85,7 +85,15 @@ namespace Datadog.Trace
         /// </summary>
         public ulong SpanId => Context.SpanId;
 
+        /// <summary>
+        /// Gets or sets the collection of tags associated to this span.
+        /// </summary>
         internal ITags Tags { get; set; }
+
+        /// <summary>
+        /// Gets the collection of tags associated to this span.
+        /// </summary>
+        ITags ISpan.Tags => Tags;
 
         internal SpanContext Context { get; }
 
@@ -94,9 +102,15 @@ namespace Datadog.Trace
         /// </summary>
         ISpanContext ISpan.Context => Context;
 
-        internal DateTimeOffset StartTime { get; private set; }
+        /// <summary>
+        /// Gets the starting time of this span.
+        /// </summary>
+        public DateTimeOffset StartTime { get; private set; }
 
-        internal TimeSpan Duration { get; private set; }
+        /// <summary>
+        /// Gets the during of this span.
+        /// </summary>
+        public TimeSpan Duration { get; private set; }
 
         internal bool IsFinished { get; private set; }
 
@@ -295,9 +309,14 @@ namespace Datadog.Trace
         }
 
         /// <summary>
-        /// Add the StackTrace and other exception metadata to the span
+        /// Sets the span's error flag and adds error tags
+        /// using values from the specified <paramref name="exception"/> object.
         /// </summary>
         /// <param name="exception">The exception.</param>
+        /// <seealso cref="Span.Error"/>
+        /// <seealso cref="Trace.Tags.ErrorMsg"/>
+        /// <seealso cref="Trace.Tags.ErrorStack"/>
+        /// <seealso cref="Trace.Tags.ErrorType"/>
         public void SetException(Exception exception)
         {
             Error = true;

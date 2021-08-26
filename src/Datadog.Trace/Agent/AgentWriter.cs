@@ -105,7 +105,7 @@ namespace Datadog.Trace.Agent
             return _api.SendTracesAsync(EmptyPayload, 0);
         }
 
-        public void WriteTrace(ArraySegment<Span> trace)
+        public void WriteTrace(ArraySegment<ISpan> trace)
         {
             if (_serializationTask.IsCompleted)
             {
@@ -323,7 +323,7 @@ namespace Datadog.Trace.Agent
             }
         }
 
-        private void SerializeTrace(ArraySegment<Span> trace)
+        private void SerializeTrace(ArraySegment<ISpan> trace)
         {
             // Declaring as inline method because only safe to invoke in the context of SerializeTrace
             SpanBuffer SwapBuffers()
@@ -434,7 +434,7 @@ namespace Datadog.Trace.Agent
                 }
                 catch (Exception ex)
                 {
-                    Log.Error(ex, "An error occured in the serialization thread");
+                    Log.Error(ex, "An error occurred in the serialization thread");
                 }
 
                 if (_processExit.Task.IsCompleted)
@@ -448,7 +448,7 @@ namespace Datadog.Trace.Agent
                 }
                 else
                 {
-                    // No traces were pushed in the last period, wait undefinitely
+                    // No traces were pushed in the last period, wait indefinitely
                     _serializationMutex.Wait();
                     _serializationMutex.Reset();
                 }
@@ -457,10 +457,10 @@ namespace Datadog.Trace.Agent
 
         private readonly struct WorkItem
         {
-            public readonly ArraySegment<Span> Trace;
+            public readonly ArraySegment<ISpan> Trace;
             public readonly Action Callback;
 
-            public WorkItem(ArraySegment<Span> trace)
+            public WorkItem(ArraySegment<ISpan> trace)
             {
                 Trace = trace;
                 Callback = null;
