@@ -91,7 +91,7 @@ namespace Datadog.Trace.AppSec.Agent
                 catch (Exception ex)
                 {
                     // todo don't drop traces
-                    Log.Error(ex, "An error occured in sending appsec events");
+                    Log.Error(ex, "AppSec failed to report AppSec events to the agent.");
                 }
                 finally
                 {

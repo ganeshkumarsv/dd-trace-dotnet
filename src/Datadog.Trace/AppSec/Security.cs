@@ -69,7 +69,7 @@ namespace Datadog.Trace.AppSec
             catch (Exception ex)
             {
                 _settings.Enabled = false;
-                Log.Error(ex, "Datadog AppSec failed to initialize, your application is NOT protected");
+                Log.Error(ex, "AppSec could not start because of an unexpected error. No security activities will be collected. Please contact support at https://docs.datadoghq.com/help/ for help.");
             }
         }
 
@@ -189,7 +189,7 @@ namespace Datadog.Trace.AppSec
 
             if (!osSupported || !archSupported)
             {
-                Log.Warning($"AppSec could not start because the current environment is not supported. No security activities will be collected. Please contact support at https://docs.datadoghq.com/help/ for help. Host information: {{ operating_system:{frameworkDescription.OSPlatform} }}, arch:{{ {frameworkDescription.ProcessArchitecture} }}, runtime_infos: {{ {frameworkDescription.ProductVersion} }}");
+                Log.Error($"AppSec could not start because the current environment is not supported. No security activities will be collected. Please contact support at https://docs.datadoghq.com/help/ for help. Host information: {{ operating_system:{frameworkDescription.OSPlatform} }}, arch:{{ {frameworkDescription.ProcessArchitecture} }}, runtime_infos: {{ {frameworkDescription.ProductVersion} }}");
             }
 
             return osSupported && archSupported;
