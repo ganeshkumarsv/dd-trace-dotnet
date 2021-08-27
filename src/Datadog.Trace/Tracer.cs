@@ -324,7 +324,7 @@ namespace Datadog.Trace
 
         /// <summary>
         /// This is a shortcut for <see cref="StartSpan(string, ISpanContext, string, DateTimeOffset?, bool)"/>
-        /// and <see cref="ActivateSpan(ISpan, bool)"/>, it creates a new span with the given parameters and makes it active.
+        /// and <see cref="ActivateSpan(ISpan, bool)"/>. It creates a new span with the given parameters and makes it active.
         /// </summary>
         /// <param name="operationName">The span's operation name</param>
         /// <param name="parent">The span's parent</param>
@@ -433,7 +433,7 @@ namespace Datadog.Trace
             return new SpanContext(parent, traceContext, finalServiceName, spanId);
         }
 
-        internal IScope StartActiveWithTags(string operationName, ISpanContext parent = null, string serviceName = null, DateTimeOffset? startTime = null, bool ignoreActiveScope = false, bool finishOnClose = true, ITags tags = null, ulong? spanId = null)
+        public IScope StartActiveWithTags(string operationName, ISpanContext parent = null, string serviceName = null, DateTimeOffset? startTime = null, bool ignoreActiveScope = false, bool finishOnClose = true, ITags tags = null, ulong? spanId = null)
         {
             var span = StartSpan(operationName, tags, parent, serviceName, startTime, ignoreActiveScope, spanId);
             return _scopeManager.Activate(span, finishOnClose);

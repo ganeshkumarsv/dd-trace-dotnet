@@ -290,7 +290,7 @@ namespace Datadog.Trace.DiagnosticListeners
             return null;
         }
 
-        private static IEnumerable<KeyValuePair<string, string>> ExtractHeaderTags(HttpRequest request, Tracer tracer)
+        private static IEnumerable<KeyValuePair<string, string>> ExtractHeaderTags(HttpRequest request, IDatadogTracer tracer)
         {
             var settings = tracer.Settings;
 
@@ -584,7 +584,7 @@ namespace Datadog.Trace.DiagnosticListeners
         }
 
         // note: this can be static, but StyleCop will make me move it, so leaving as-is for now - lucas
-        private ISpan StartCoreSpan(IDatadogTracer tracer, HttpContext httpContext, HttpRequest request)
+        private Span StartCoreSpan(Tracer tracer, HttpContext httpContext, HttpRequest request)
         {
             string host = request.Host.Value;
             string httpMethod = request.Method?.ToUpperInvariant() ?? "UNKNOWN";
@@ -642,6 +642,7 @@ namespace Datadog.Trace.DiagnosticListeners
                 HttpContext httpContext = requestStruct.HttpContext;
                 HttpRequest request = httpContext.Request;
                 Span span = null;
+
                 if (shouldTrace)
                 {
                     span = StartCoreSpan(tracer, httpContext, request);
