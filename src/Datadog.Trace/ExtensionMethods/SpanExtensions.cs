@@ -55,7 +55,7 @@ namespace Datadog.Trace.ExtensionMethods
         }
 
         internal static void DecorateWebServerSpan(
-            this Span span,
+            this ISpan span,
             string resourceName,
             string method,
             string host,

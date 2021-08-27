@@ -648,12 +648,13 @@ namespace Datadog.Trace.DiagnosticListeners
 
                 if (shouldSecure)
                 {
-                    RaiseIntrumentationEvent(security, httpContext, request, span);
+                    RaiseInstrumentationEvent(security, httpContext, request, span);
                 }
             }
         }
 
-        private void RaiseIntrumentationEvent(IDatadogSecurity security, HttpContext context, HttpRequest request, Span span, RouteData routeData = null)
+        // note: this can be static, but StyleCop will make me move it, so leaving as-is for now - lucas
+        private void RaiseInstrumentationEvent(IDatadogSecurity security, HttpContext context, HttpRequest request, Span span, RouteData routeData = null)
         {
             try
             {
@@ -823,7 +824,7 @@ namespace Datadog.Trace.DiagnosticListeners
 
                 if (shouldSecure)
                 {
-                    RaiseIntrumentationEvent(security, httpContext, request, span ?? parentSpan, typedArg.RouteData);
+                    RaiseInstrumentationEvent(security, httpContext, request, span ?? parentSpan, typedArg.RouteData);
                 }
             }
         }

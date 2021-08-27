@@ -171,7 +171,7 @@ namespace Datadog.Trace
         }
 
         [Obsolete("This method is deprecated and will be removed. Use ExtractHeaderTags<T>(T, IEnumerable<KeyValuePair<string, string>>, string) instead. " +
-            "Kept for backwards compatability where there is a version mismatch between manual and automatic instrumentation")]
+            "Kept for backwards compatibility where there is a version mismatch between manual and automatic instrumentation")]
         public IEnumerable<KeyValuePair<string, string>> ExtractHeaderTags<T>(T headers, IEnumerable<KeyValuePair<string, string>> headerToTagMap)
             where T : IHeadersCollection
         {
