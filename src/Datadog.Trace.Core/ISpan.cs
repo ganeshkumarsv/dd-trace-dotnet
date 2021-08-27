@@ -4,6 +4,7 @@
 // </copyright>
 
 using System;
+using Datadog.Trace.Tagging;
 
 namespace Datadog.Trace
 {
@@ -18,6 +19,19 @@ namespace Datadog.Trace
         /// </summary>
         bool Error { get; set; }
 
+        ITags Tags { get; }
+
+        ISpanContext Context { get; }
+
+        /// <summary>
+        /// Gets or sets operation name
+        /// </summary>
+        string OperationName { get; set; }
+
+        DateTimeOffset StartTime { get; }
+
+        TimeSpan Duration { get; }
+
         ISpan SetTag(string key, string value);
 
         string GetTag(string key);
@@ -29,5 +43,12 @@ namespace Datadog.Trace
         /// Any changes to the span after it is finished will be ignored.
         /// </summary>
         void Finish();
+
+        /// <summary>
+        /// Sets the end time of the span to the specified value and marks he span ready to send.
+        /// Any changes to the span after it is finished will be ignored.
+        /// </summary>
+        /// <param name="finishTimestamp">Explicit value for the end time of the span.</param>
+        void Finish(DateTimeOffset finishTimestamp);
     }
 }

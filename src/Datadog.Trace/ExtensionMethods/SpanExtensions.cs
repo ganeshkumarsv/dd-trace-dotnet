@@ -103,7 +103,7 @@ namespace Datadog.Trace.ExtensionMethods
             }
         }
 
-        internal static void SetHttpStatusCode(this Span span, int statusCode, bool isServer)
+        internal static void SetHttpStatusCode(this ISpan span, int statusCode, bool isServer)
         {
             string statusCodeString = ConvertStatusCodeToString(statusCode);
 

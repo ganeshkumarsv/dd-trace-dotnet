@@ -24,5 +24,26 @@ namespace Datadog.Trace
         /// Gets the service name to propagate to child spans.
         /// </summary>
         string ServiceName { get; }
+
+        /// <summary>
+        /// Gets the span id of the parent span
+        /// </summary>
+        ulong? ParentId { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether the span is the top-level span for its service.
+        /// </summary>
+        bool IsTopLevel { get; }
+
+        /// <summary>
+        /// Gets the origin of the trace.
+        /// </summary>
+        string Origin { get; }
+
+        /// <summary>
+        /// Gets the sampling priority for contexts created from incoming propagated context.
+        /// Returns null for local contexts.
+        /// </summary>
+        SamplingPriority? SamplingPriority { get; }
     }
 }

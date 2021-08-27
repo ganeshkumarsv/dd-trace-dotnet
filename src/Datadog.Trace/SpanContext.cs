@@ -3,7 +3,6 @@
 // This product includes software developed at Datadog (https://www.datadoghq.com/). Copyright 2017 Datadog, Inc.
 // </copyright>
 
-using Datadog.Trace.ExtensionMethods;
 using Datadog.Trace.Logging;
 using Datadog.Trace.Util;
 
@@ -105,9 +104,19 @@ namespace Datadog.Trace
         public string ServiceName { get; set; }
 
         /// <summary>
-        /// Gets or sets the origin of the trace
+        /// Gets a value indicating whether the span is the top-level span for its service.
+        /// </summary>
+        public bool IsTopLevel => Parent == null || Parent.ServiceName != ServiceName;
+
+        /// <summary>
+        /// Gets or sets the origin of the trace.
         /// </summary>
         internal string Origin { get; set; }
+
+        /// <summary>
+        /// Gets the origin of the trace.
+        /// </summary>
+        string ISpanContext.Origin => Origin;
 
         /// <summary>
         /// Gets the trace context.
@@ -119,6 +128,6 @@ namespace Datadog.Trace
         /// Gets the sampling priority for contexts created from incoming propagated context.
         /// Returns null for local contexts.
         /// </summary>
-        internal SamplingPriority? SamplingPriority { get; }
+        public SamplingPriority? SamplingPriority { get; }
     }
 }

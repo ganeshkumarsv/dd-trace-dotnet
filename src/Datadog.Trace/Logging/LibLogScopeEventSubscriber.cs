@@ -172,7 +172,7 @@ namespace Datadog.Trace.Logging
         {
             if (!_executingIISPreStartInit)
             {
-                SetSerilogCompatibleLogContext(spanEventArgs.Span.TraceId, spanEventArgs.Span.SpanId);
+                SetSerilogCompatibleLogContext(spanEventArgs.Span.Context.TraceId, spanEventArgs.Span.Context.SpanId);
             }
         }
 
@@ -189,7 +189,7 @@ namespace Datadog.Trace.Logging
             if (!_executingIISPreStartInit)
             {
                 RemoveAllCorrelationIdentifierContexts();
-                SetLogContext(spanEventArgs.Span.TraceId, spanEventArgs.Span.SpanId);
+                SetLogContext(spanEventArgs.Span.Context.TraceId, spanEventArgs.Span.Context.SpanId);
             }
         }
 

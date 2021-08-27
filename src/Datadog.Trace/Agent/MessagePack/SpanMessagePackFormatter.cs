@@ -10,7 +10,7 @@ using Datadog.Trace.Vendors.MessagePack.Formatters;
 
 namespace Datadog.Trace.Agent.MessagePack
 {
-    internal class SpanMessagePackFormatter : IMessagePackFormatter<Span>
+    internal class SpanMessagePackFormatter : IMessagePackFormatter<ISpan>
     {
         private static byte[] _traceIdBytes = StringEncoding.UTF8.GetBytes("trace_id");
         private static byte[] _spanIdBytes = StringEncoding.UTF8.GetBytes("span_id");
@@ -23,7 +23,7 @@ namespace Datadog.Trace.Agent.MessagePack
         private static byte[] _parentIdBytes = StringEncoding.UTF8.GetBytes("parent_id");
         private static byte[] _errorBytes = StringEncoding.UTF8.GetBytes("error");
 
-        public int Serialize(ref byte[] bytes, int offset, Span value, IFormatterResolver formatterResolver)
+        public int Serialize(ref byte[] bytes, int offset, ISpan value, IFormatterResolver formatterResolver)
         {
             // First, pack array length (or map length).
             // It should be the number of members of the object to be serialized.
@@ -58,7 +58,7 @@ namespace Datadog.Trace.Agent.MessagePack
             offset += MessagePackBinary.WriteString(ref bytes, offset, value.ResourceName);
 
             offset += MessagePackBinary.WriteStringBytes(ref bytes, offset, _serviceBytes);
-            offset += MessagePackBinary.WriteString(ref bytes, offset, value.ServiceName);
+            offset += MessagePackBinary.WriteString(ref bytes, offset, value.Context.ServiceName);
 
             offset += MessagePackBinary.WriteStringBytes(ref bytes, offset, _typeBytes);
             offset += MessagePackBinary.WriteString(ref bytes, offset, value.Type);
@@ -81,12 +81,12 @@ namespace Datadog.Trace.Agent.MessagePack
                 offset += MessagePackBinary.WriteByte(ref bytes, offset, 1);
             }
 
-            offset += value.Tags.SerializeTo(ref bytes, offset, value);
+            offset += value.Tags.SerializeTo(ref bytes, offset, value.Context.IsTopLevel, value.Context.Origin);
 
             return offset - originalOffset;
         }
 
-        public Span Deserialize(byte[] bytes, int offset, IFormatterResolver formatterResolver, out int readSize)
+        public ISpan Deserialize(byte[] bytes, int offset, IFormatterResolver formatterResolver, out int readSize)
         {
             throw new NotImplementedException();
         }

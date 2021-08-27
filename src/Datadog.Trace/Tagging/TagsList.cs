@@ -181,12 +181,12 @@ namespace Datadog.Trace.Tagging
             }
         }
 
-        public int SerializeTo(ref byte[] bytes, int offset, Span span)
+        public int SerializeTo(ref byte[] bytes, int offset, bool isTopLevel, string origin)
         {
             int originalOffset = offset;
 
-            offset += WriteTags(ref bytes, offset, span);
-            offset += WriteMetrics(ref bytes, offset, span);
+            offset += WriteTags(ref bytes, offset, isTopLevel, origin);
+            offset += WriteMetrics(ref bytes, offset, isTopLevel);
 
             return offset - originalOffset;
         }
@@ -262,7 +262,7 @@ namespace Datadog.Trace.Tagging
             offset += MessagePackBinary.WriteDouble(ref bytes, offset, value);
         }
 
-        private int WriteTags(ref byte[] bytes, int offset, Span span)
+        private int WriteTags(ref byte[] bytes, int offset, bool isTopLevel, string origin)
         {
             int originalOffset = offset;
 
@@ -307,14 +307,13 @@ namespace Datadog.Trace.Tagging
                 }
             }
 
-            if (span.IsTopLevel)
+            if (isTopLevel)
             {
                 count++;
                 offset += MessagePackBinary.WriteStringBytes(ref bytes, offset, _runtimeIdBytes);
                 offset += MessagePackBinary.WriteStringBytes(ref bytes, offset, _runtimeIdValueBytes);
             }
 
-            string origin = span.Context.Origin;
             if (!isOriginWritten && !string.IsNullOrEmpty(origin))
             {
                 count++;
@@ -331,7 +330,7 @@ namespace Datadog.Trace.Tagging
             return offset - originalOffset;
         }
 
-        private int WriteMetrics(ref byte[] bytes, int offset, Span span)
+        private int WriteMetrics(ref byte[] bytes, int offset, bool isTopLevel)
         {
             int originalOffset = offset;
 
@@ -369,7 +368,7 @@ namespace Datadog.Trace.Tagging
                 }
             }
 
-            if (span.IsTopLevel)
+            if (isTopLevel)
             {
                 count++;
                 WriteMetric(ref bytes, ref offset, Trace.Metrics.TopLevelSpan, 1.0);

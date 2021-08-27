@@ -66,7 +66,7 @@ namespace Datadog.Trace
         {
             get
             {
-                return Tracer.Instance.ActiveScope?.Span?.TraceId ?? 0;
+                return Tracer.Instance.ActiveScope?.Span?.Context.TraceId ?? 0;
             }
         }
 
@@ -78,7 +78,7 @@ namespace Datadog.Trace
         {
             get
             {
-                return Tracer.Instance.ActiveScope?.Span?.SpanId ?? 0;
+                return Tracer.Instance.ActiveScope?.Span?.Context.SpanId ?? 0;
             }
         }
     }

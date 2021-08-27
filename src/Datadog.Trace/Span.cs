@@ -85,19 +85,41 @@ namespace Datadog.Trace
         /// </summary>
         public ulong SpanId => Context.SpanId;
 
+        /// <summary>
+        /// Gets or sets the underlying tag collection.
+        /// </summary>
         internal ITags Tags { get; set; }
 
+        /// <summary>
+        /// Gets the underlying tag collection.
+        /// </summary>
+        ITags ISpan.Tags => Tags;
+
+        /// <summary>
+        /// Gets the span context for this span.
+        /// </summary>
         internal SpanContext Context { get; }
 
-        internal DateTimeOffset StartTime { get; private set; }
+        /// <summary>
+        /// Gets the span context for this span.
+        /// </summary>
+        ISpanContext ISpan.Context => Context;
 
-        internal TimeSpan Duration { get; private set; }
+        /// <summary>
+        /// Gets the start time of this span.
+        /// </summary>
+        public DateTimeOffset StartTime { get; private set; }
+
+        /// <summary>
+        /// Gets the duration of this span.
+        /// </summary>
+        public TimeSpan Duration { get; private set; }
 
         internal bool IsFinished { get; private set; }
 
         internal bool IsRootSpan => Context.TraceContext?.RootSpan == this;
 
-        internal bool IsTopLevel => Context.Parent == null || Context.Parent.ServiceName != ServiceName;
+        internal bool IsTopLevel => Context.IsTopLevel;
 
         /// <summary>
         /// Returns a <see cref="string" /> that represents this instance.
