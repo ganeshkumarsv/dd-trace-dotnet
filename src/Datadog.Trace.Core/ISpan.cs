@@ -5,9 +5,9 @@
 
 using System;
 
-namespace Datadog.Trace.Abstractions
+namespace Datadog.Trace
 {
-    internal interface ISpan
+    public interface ISpan
     {
         string ResourceName { get; set; }
 
@@ -23,5 +23,11 @@ namespace Datadog.Trace.Abstractions
         string GetTag(string key);
 
         void SetException(Exception exception);
+
+        /// <summary>
+        /// Records the end time of the span and marks it ready to send.
+        /// Any changes to the span after it is finished will be ignored.
+        /// </summary>
+        void Finish();
     }
 }

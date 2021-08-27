@@ -5,7 +5,6 @@
 
 using System;
 using System.Collections.Generic;
-using Datadog.Trace.Abstractions;
 
 namespace Datadog.Trace.TestHelpers
 {

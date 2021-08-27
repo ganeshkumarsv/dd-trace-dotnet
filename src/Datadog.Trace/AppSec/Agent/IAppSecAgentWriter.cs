@@ -4,7 +4,6 @@
 // </copyright>
 
 using System.Threading.Tasks;
-using Datadog.Trace.Abstractions;
 
 namespace Datadog.Trace.AppSec.Agent
 {

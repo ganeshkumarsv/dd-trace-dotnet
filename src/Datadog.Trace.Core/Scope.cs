@@ -3,8 +3,6 @@
 // This product includes software developed at Datadog (https://www.datadoghq.com/). Copyright 2017 Datadog, Inc.
 // </copyright>
 
-using Datadog.Trace.Abstractions;
-
 namespace Datadog.Trace
 {
     /// <summary>
@@ -18,7 +16,7 @@ namespace Datadog.Trace
         private readonly IScopeManager _scopeManager;
         private readonly bool _finishOnClose;
 
-        internal Scope(Scope parent, Span span, IScopeManager scopeManager, bool finishOnClose)
+        internal Scope(Scope parent, ISpan span, IScopeManager scopeManager, bool finishOnClose)
         {
             Parent = parent;
             Span = span;
@@ -27,15 +25,9 @@ namespace Datadog.Trace
         }
 
         /// <summary>
-        /// Gets the active span wrapped in this scope
+        /// Gets the span associated with this scope.
         /// </summary>
-        public Span Span { get; }
-
-        /// <summary>
-        /// Gets the active span wrapped in this scope
-        /// Proxy to Span without concrete return value
-        /// </summary>
-        ISpan IScope.Span => Span;
+        public ISpan Span { get; }
 
         internal Scope Parent { get; }
 

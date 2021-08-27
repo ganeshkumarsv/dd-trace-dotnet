@@ -25,7 +25,7 @@ namespace Datadog.Trace
         {
         }
 
-        public override sealed object InitializeLifetimeService()
+        public override object InitializeLifetimeService()
         {
             // For net45 where AsyncLocal is not a built-in Framework class, we must propgate the ambient context using LogicalCallContext.
             // One consequence of this is that we invoke the System.Runtime.Remoting infrastructure, and if a remote method call or cross-AppDomain
