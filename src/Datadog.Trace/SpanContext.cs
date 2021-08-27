@@ -117,9 +117,21 @@ namespace Datadog.Trace
         internal ITraceContext TraceContext { get; }
 
         /// <summary>
+        /// Gets the trace context.
+        /// Returns null for contexts created from incoming propagated context.
+        /// </summary>
+        ITraceContext ISpanContext.TraceContext => TraceContext;
+
+        /// <summary>
         /// Gets the sampling priority for contexts created from incoming propagated context.
         /// Returns null for local contexts.
         /// </summary>
         internal SamplingPriority? SamplingPriority { get; }
+
+        /// <summary>
+        /// Gets the sampling priority for contexts created from incoming propagated context.
+        /// Returns null for local contexts.
+        /// </summary>
+        SamplingPriority? ISpanContext.SamplingPriority => SamplingPriority;
     }
 }

@@ -7,7 +7,7 @@ using System;
 
 namespace Datadog.Trace
 {
-    internal interface ITraceContext
+    public interface ITraceContext
     {
         DateTimeOffset UtcNow { get; }
 

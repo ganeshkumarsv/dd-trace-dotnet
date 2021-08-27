@@ -18,6 +18,12 @@ namespace Datadog.Trace
 
         ISampler Sampler { get; }
 
+        /// <summary>
+        /// Gets the currently active scope.
+        /// Returns <c>null</c> if there is no active scope.
+        /// </summary>
+        IScope ActiveScope { get; }
+
         ISpan StartSpan(string operationName);
 
         ISpan StartSpan(string operationName, ISpanContext parent);

@@ -39,5 +39,17 @@ namespace Datadog.Trace
         /// Gets the parent span context.
         /// </summary>
         ISpanContext Parent { get; }
+
+        /// <summary>
+        /// Gets the trace context.
+        /// Returns null for contexts created from incoming propagated context.
+        /// </summary>
+        ITraceContext TraceContext { get; }
+
+        /// <summary>
+        /// Gets the sampling priority for contexts created from incoming propagated context.
+        /// Returns null for local contexts.
+        /// </summary>
+        SamplingPriority? SamplingPriority { get; }
     }
 }

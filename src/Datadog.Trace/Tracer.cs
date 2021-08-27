@@ -220,7 +220,8 @@ namespace Datadog.Trace
         }
 
         /// <summary>
-        /// Gets the active scope
+        /// Gets the currently active scope.
+        /// Returns <c>null</c> if there is no active scope.
         /// </summary>
         public IScope ActiveScope => _scopeManager.Active;
 

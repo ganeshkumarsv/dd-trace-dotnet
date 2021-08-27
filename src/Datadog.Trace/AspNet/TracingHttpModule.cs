@@ -72,7 +72,7 @@ namespace Datadog.Trace.AspNet
 
         private void OnBeginRequest(object sender, EventArgs eventArgs)
         {
-            Scope scope = null;
+            IScope scope = null;
 
             try
             {

@@ -583,7 +583,8 @@ namespace Datadog.Trace.DiagnosticListeners
             return span;
         }
 
-        private Span StartCoreSpan(Tracer tracer, HttpContext httpContext, HttpRequest request)
+        // note: this can be static, but StyleCop will make me move it, so leaving as-is for now - lucas
+        private ISpan StartCoreSpan(IDatadogTracer tracer, HttpContext httpContext, HttpRequest request)
         {
             string host = request.Host.Value;
             string httpMethod = request.Method?.ToUpperInvariant() ?? "UNKNOWN";
@@ -677,7 +678,7 @@ namespace Datadog.Trace.DiagnosticListeners
                 return;
             }
 
-            Span span = tracer.ActiveScope?.Span;
+            ISpan span = tracer.ActiveScope?.Span;
 
             if (span != null)
             {

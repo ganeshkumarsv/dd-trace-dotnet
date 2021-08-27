@@ -48,7 +48,7 @@ namespace Datadog.Trace
         /// <param name="context">A <see cref="SpanContext"/> value that will be propagated into <paramref name="headers"/>.</param>
         /// <param name="headers">A <see cref="IHeadersCollection"/> to add new headers to.</param>
         /// <typeparam name="T">Type of header collection</typeparam>
-        public void Inject<T>(SpanContext context, T headers)
+        public void Inject<T>(ISpanContext context, T headers)
             where T : IHeadersCollection
         {
             if (context == null) { throw new ArgumentNullException(nameof(context)); }
