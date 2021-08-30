@@ -19,19 +19,19 @@ namespace Datadog.Trace
     /// tracks the duration of an operation as well as associated metadata in
     /// the form of a resource name, a service name, and user defined tags.
     /// </summary>
-    public class Span : IDisposable, ISpan
+    public class SpanImpl : Span, IDisposable
     {
         private static readonly IDatadogLogger Log = DatadogLogging.GetLoggerFor<Span>();
         private static readonly bool IsLogLevelDebugEnabled = Log.IsEnabled(LogEventLevel.Debug);
 
         private readonly object _lock = new object();
 
-        internal Span(SpanContext context, DateTimeOffset? start)
+        internal SpanImpl(SpanContext context, DateTimeOffset? start)
             : this(context, start, null)
         {
         }
 
-        internal Span(SpanContext context, DateTimeOffset? start, ITags tags)
+        internal SpanImpl(SpanContext context, DateTimeOffset? start, ITags tags)
         {
             Tags = tags ?? new CommonTags();
             Context = context;
