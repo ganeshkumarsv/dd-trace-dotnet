@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
-using Datadog.Trace.Abstractions;
 using Datadog.Trace.Agent;
 using Datadog.Trace.AppSec.EventModel.Batch;
 using Datadog.Trace.Configuration;

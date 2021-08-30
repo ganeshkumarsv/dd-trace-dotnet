@@ -5,7 +5,7 @@
 
 using System;
 
-namespace Datadog.Trace.Abstractions
+namespace Datadog.Trace
 {
     internal interface ISpan
     {
